@@ -9,6 +9,8 @@ const App = () => {
 
   const API_URL = "https://devtool-api.herokuapp.com";
   const GIT_COMMAND = "git log | wc -l";
+  //const API_URL = "http://127.0.0.1:8000";
+  //const GIT_COMMAND = "echo 33";
 
   const analyzeRepo = async () => {
     setIsLoading(true);
@@ -16,11 +18,11 @@ const App = () => {
     const query = `${API_URL}/analyze?git_url=${repoURL}&command=${GIT_COMMAND}`;
     const response = await fetch(query);
     const resultJson = await response.json();
-    console.log(`Repo has changed ${resultJson.result} times!`);
     setRepoResult({
       raw: resultJson.result,
       url: repoURL,
       command: GIT_COMMAND,
+      fileTree: resultJson.file_tree,
     });
 
     setIsLoading(false);
@@ -85,6 +87,11 @@ const App = () => {
             <div>Repository: {repoResult.url}</div>
             <div>Command: {repoResult.command}</div>
             <div>Result: {repoResult.raw}</div>
+            <div style={{ whiteSpace: "pre-wrap" }}>
+              <br />
+              Directory Tree: <br />
+              {repoResult.fileTree}
+            </div>
           </div>
         )}
       </div>
