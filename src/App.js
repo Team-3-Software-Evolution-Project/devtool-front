@@ -28,6 +28,26 @@ const App = () => {
     setIsLoading(false);
   };
 
+  const formatFileTree = (fileTreeString, totalCommits) => {
+    let treeArray = fileTreeString.split("\n");
+    var filteredArray = treeArray.map((row) => {
+      let commits = 0;
+      if (row.includes("[")) {
+        commits = row.split("[")[1].replace("]", "");
+      }
+
+      const commitColor = commits > totalCommits * 0.1 ? "red" : "black";
+      return (
+        <span style={{ color: commitColor }}>
+          {row}
+          <br />
+        </span>
+      );
+    });
+
+    return filteredArray;
+  };
+
   // Doing this to wake up Heroku instance if it is sleeping (not used within 30 minutes)
   const pingAPI = () => {
     fetch(API_URL);
@@ -83,7 +103,7 @@ const App = () => {
               marginTop: "16px",
               padding: "16px",
               border: "0",
-              borderRadius: "10px"
+              borderRadius: "10px",
             }}
           >
             <div>Repository: {repoResult.url}</div>
@@ -92,7 +112,7 @@ const App = () => {
             <div style={{ whiteSpace: "pre-wrap" }}>
               <br />
               Directory Tree: <br />
-              {repoResult.fileTree}
+              {formatFileTree(repoResult.fileTree, repoResult.raw)}
             </div>
           </div>
         )}
