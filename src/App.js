@@ -17,7 +17,7 @@ const App = () => {
     const response = await fetch(query);
     const resultJson = await response.json();
     console.log(`Repo has changed ${resultJson.result} times!`);
-    setRepoResult(resultJson.result);
+    setRepoResult({raw: resultJson.result, url: repoURL, command: GIT_COMMAND});
 
     setIsLoading(false);
   };
@@ -69,9 +69,9 @@ const App = () => {
               padding: "8px",
             }}
           >
-            <div>Repository: {repoURL}</div>
-            <div>Command: {GIT_COMMAND}</div>
-            <div>Result: {repoResult}</div>
+            <div>Repository: {repoResult.url}</div>
+            <div>Command: {repoResult.command}</div>
+            <div>Result: {repoResult.raw}</div>
           </div>
         )}
       </div>
