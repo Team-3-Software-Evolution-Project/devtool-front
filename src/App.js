@@ -36,7 +36,14 @@ const App = () => {
         commits = row.split("[")[1].replace("]", "");
       }
 
-      const commitColor = commits > totalCommits * 0.1 ? "red" : "black";
+      // Currently 10% and 5% as limit for highlight
+      let commitColor = "black";
+      const commitRatio = commits / totalCommits;
+      if (commitRatio > 0.1) {
+        commitColor = "red";
+      } else if (commitRatio > 0.05) {
+        commitColor = "orange";
+      }
       return (
         <span style={{ color: commitColor }}>
           {row}
