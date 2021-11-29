@@ -49,7 +49,7 @@ const App = () => {
 
         <div className="bio">
           This application is capable of analyzing how many times files in a
-          git-repo has been changed, cool right?{" "}
+          git-repo have been changed, cool right?{" "}
           <span role="img" aria-label="Hacker cat emoji">
             🐱‍💻
           </span>
@@ -81,12 +81,14 @@ const App = () => {
             style={{
               backgroundColor: "OldLace",
               marginTop: "16px",
-              padding: "8px",
+              padding: "16px",
+              border: "0",
+              borderRadius: "10px"
             }}
           >
             <div>Repository: {repoResult.url}</div>
             <div>Command: {repoResult.command}</div>
-            <div>Result: {repoResult.raw}</div>
+            <div>Total commits: {repoResult.raw}</div>
             <div style={{ whiteSpace: "pre-wrap" }}>
               <br />
               Directory Tree: <br />
