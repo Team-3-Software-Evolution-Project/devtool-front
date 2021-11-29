@@ -55,6 +55,21 @@ const App = () => {
     return filteredArray;
   };
 
+  const Footer = () => (
+    <div className="footer">
+      <p>
+        Created by Team 3<br />
+        <a
+          href="https://github.com/Team-3-Software-Evolution-Project"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Our Github
+        </a>
+      </p>
+    </div>
+  );
+
   // Doing this to wake up Heroku instance if it is sleeping (not used within 30 minutes)
   const pingAPI = () => {
     fetch(API_URL);
@@ -123,6 +138,7 @@ const App = () => {
             </div>
           </div>
         )}
+        <Footer />
       </div>
     </div>
   );

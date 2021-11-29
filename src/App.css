@@ -46,6 +46,17 @@
   background-color: rgb(202, 176, 128);
 }
 
+.footer{
+  text-align: center;
+  margin: 0 auto;
+  padding: 1rem;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  font-style: italic;
+  color: gray;
+}
+
 .lds-facebook {
   display: inline-block;
   position: relative;
