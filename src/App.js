@@ -8,7 +8,7 @@ const App = () => {
   const [repoResult, setRepoResult] = useState(undefined);
 
   const API_URL = "https://devtool-api.herokuapp.com";
-  const GIT_COMMAND = "git log | wc -l";
+  const GIT_COMMAND = "git log --oneline | wc -l";
   //const API_URL = "http://127.0.0.1:8000";
   //const GIT_COMMAND = "echo 33";
 
