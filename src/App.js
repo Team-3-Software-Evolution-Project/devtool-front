@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import { TextField } from "@mui/material";
 
@@ -17,10 +17,23 @@ const App = () => {
     const response = await fetch(query);
     const resultJson = await response.json();
     console.log(`Repo has changed ${resultJson.result} times!`);
-    setRepoResult({raw: resultJson.result, url: repoURL, command: GIT_COMMAND});
+    setRepoResult({
+      raw: resultJson.result,
+      url: repoURL,
+      command: GIT_COMMAND,
+    });
 
     setIsLoading(false);
   };
+
+  // Doing this to wake up Heroku instance if it is sleeping (not used within 30 minutes)
+  const pingAPI = () => {
+    fetch(API_URL);
+  };
+
+  useEffect(() => {
+    pingAPI();
+  }, []);
 
   return (
     <div className="mainContainer">
