@@ -41,6 +41,11 @@
   font-weight: bold;
 }
 
+.repoButton:hover{
+  transition: background .3s ease-in;
+  background-color: rgb(202, 176, 128);
+}
+
 .lds-facebook {
   display: inline-block;
   position: relative;
