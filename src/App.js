@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { get } from "axios";
 import "./App.css";
 import { TextField } from "@mui/material";
 
@@ -7,30 +8,36 @@ const App = () => {
   const [repoURL, setRepoURL] = useState("");
   const [repoResult, setRepoResult] = useState(undefined);
 
-  const API_URL = "https://devtool-api.herokuapp.com";
+  //const API_URL = "https://devtool-api.herokuapp.com";
   const GIT_COMMAND = "git log --oneline | wc -l";
-  //const API_URL = "http://127.0.0.1:8000";
+  const API_URL = "http://127.0.0.1:8000";
   //const GIT_COMMAND = "echo 33";
 
   const analyzeRepo = async () => {
-    setIsLoading(true);
+    if (repoURL.length > 5 && repoURL.includes("git")) {
+      setIsLoading(true);
 
-    const query = `${API_URL}/analyze?git_url=${repoURL}&command=${GIT_COMMAND}`;
-    const response = await fetch(query);
-    const resultJson = await response.json();
-    setRepoResult({
-      raw: resultJson.result,
-      url: repoURL,
-      command: GIT_COMMAND,
-      fileTree: resultJson.file_tree,
-    });
+      const query = `${API_URL}/analyze?git_url=${repoURL}&command=${GIT_COMMAND}`;
+      const response = await get(query).catch((error) => {
+        console.error(`Error: ${error.response.data.detail}`);
+        alert(`Error: ${error.response.data.detail}, is the URL correct?`);
+      });
+      if (response) {
+        setRepoResult({
+          raw: response.data.result,
+          url: repoURL,
+          command: GIT_COMMAND,
+          fileTree: response.data.file_tree,
+        });
+      }
 
-    setIsLoading(false);
+      setIsLoading(false);
+    }
   };
 
   const formatFileTree = (fileTreeString, totalCommits) => {
     let treeArray = fileTreeString.split("\n");
-    var filteredArray = treeArray.map((row) => {
+    var filteredArray = treeArray.map((row, index) => {
       let commits = 0;
       if (row.includes("[")) {
         commits = row.split("[")[1].replace("]", "");
@@ -45,7 +52,7 @@ const App = () => {
         commitColor = "orange";
       }
       return (
-        <span style={{ color: commitColor }}>
+        <span key={index} style={{ color: commitColor }}>
           {row}
           <br />
         </span>
