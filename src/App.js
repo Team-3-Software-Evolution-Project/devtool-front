@@ -6,6 +6,8 @@ import { TextField } from "@mui/material";
 const App = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [repoURL, setRepoURL] = useState("");
+  const [repoAfter, setRepoAfter] = useState("");
+  const [repoUntil, setRepoUntil] = useState("");
   const [repoResult, setRepoResult] = useState(undefined);
 
   const API_URL = "https://devtool-api.herokuapp.com";
@@ -17,7 +19,14 @@ const App = () => {
     if (repoURL.length > 5 && repoURL.includes("git")) {
       setIsLoading(true);
 
-      const query = `${API_URL}/analyze?git_url=${repoURL}&command=${GIT_COMMAND}`;
+      let query = `${API_URL}/analyze?git_url=${repoURL}&command=${GIT_COMMAND}`;
+      if (repoAfter.length > 9) {
+        query += `&after=${repoAfter}`;
+      }
+      if (repoUntil.length > 9) {
+        query += `&until=${repoUntil}`;
+      }
+
       const response = await get(query).catch((error) => {
         console.error(`Error: ${error.response.data.detail}`);
         alert(`Error: ${error.response.data.detail}, is the URL correct?`);
@@ -119,6 +128,22 @@ const App = () => {
               color="secondary"
               onChange={(event) => setRepoURL(event.target.value)}
             />
+            <div className="dateContainer">
+              <TextField
+                id="outlined-basic"
+                label="After (YYYY-MM-DD)"
+                variant="outlined"
+                color="secondary"
+                onChange={(event) => setRepoAfter(event.target.value)}
+              />
+              <TextField
+                id="outlined-basic"
+                label="Until (YYYY-MM-DD)"
+                variant="outlined"
+                color="secondary"
+                onChange={(event) => setRepoUntil(event.target.value)}
+              />
+            </div>
             <button className="repoButton" onClick={() => analyzeRepo()}>
               Analyze repository
             </button>
