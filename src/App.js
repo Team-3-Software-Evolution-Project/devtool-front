@@ -8,9 +8,9 @@ const App = () => {
   const [repoURL, setRepoURL] = useState("");
   const [repoResult, setRepoResult] = useState(undefined);
 
-  //const API_URL = "https://devtool-api.herokuapp.com";
+  const API_URL = "https://devtool-api.herokuapp.com";
   const GIT_COMMAND = "git log --oneline | wc -l";
-  const API_URL = "http://127.0.0.1:8000";
+  //const API_URL = "http://127.0.0.1:8000";
   //const GIT_COMMAND = "echo 33";
 
   const analyzeRepo = async () => {
