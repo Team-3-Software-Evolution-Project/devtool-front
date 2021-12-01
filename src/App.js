@@ -48,7 +48,14 @@ const App = () => {
     let treeArray = fileTreeString.split("\n");
     var filteredArray = treeArray.map((row, index) => {
       let commits = 0;
-      if (row.includes("[")) {
+      if (row.includes("📂")) {
+        return (
+          <span key={index}>
+            <b>{row}</b>
+            <br />
+          </span>
+        );
+      } else if (row.includes("[")) {
         commits = row.split("[")[1].replace("]", "");
       }
 
