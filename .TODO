@@ -1,0 +1,7 @@
+- [] Until prefilled with today (?)
+- [] Numbers behind the directories (this is a central feature imo)
+- [] Refactor, move stuff out of App.js into separate components
+- [] Extendable and collapsable nodes
+    - [] To have a quick overview, I think the second directory level should be extended, everything else should be collapsed
+
+Complete: ✅
