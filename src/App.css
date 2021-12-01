@@ -32,7 +32,7 @@
 }
 
 .dateContainer {
-  margin-top: 8px;
+  margin-top: 12px;
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
