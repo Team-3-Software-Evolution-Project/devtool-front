@@ -33,10 +33,11 @@ const App = () => {
       });
       if (response) {
         setRepoResult({
-          raw: response.data.result,
+          totalCommits: response.data.total_commits,
           url: repoURL,
           command: GIT_COMMAND,
           fileTree: response.data.file_tree,
+          averageCommits: response.data.average_commits
         });
       }
 
@@ -181,11 +182,12 @@ const App = () => {
           >
             <div>Repository: {repoResult.url}</div>
             <div>Command: {repoResult.command}</div>
-            <div>Total commits: {repoResult.raw}</div>
+            <div>Total commits: {repoResult.totalCommits}</div>
+            <div>Average commits: {repoResult.averageCommits}</div>
             <div style={{ whiteSpace: "pre-wrap" }}>
               <br />
               Directory Tree: <br />
-              {formatFileTree(repoResult.fileTree, repoResult.raw)}
+              {formatFileTree(repoResult.fileTree, repoResult.totalCommits)}
             </div>
           </div>
         )}
