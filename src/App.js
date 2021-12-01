@@ -86,6 +86,16 @@ const App = () => {
     </div>
   );
 
+  const getCurrentDate = () => {
+    const today = new Date();
+
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1;
+    const date = today.getDate() < 10 ? "0" + today.getDate() : today.getDate();
+
+    return year + "-" + month + "-" + date;
+  };
+
   // Doing this to wake up Heroku instance if it is sleeping (not used within 30 minutes)
   const pingAPI = () => {
     fetch(API_URL);
@@ -134,6 +144,7 @@ const App = () => {
                 label="After (YYYY-MM-DD)"
                 variant="outlined"
                 color="secondary"
+                value="2000-01-01"
                 onChange={(event) => setRepoAfter(event.target.value)}
               />
               <TextField
@@ -141,6 +152,7 @@ const App = () => {
                 label="Until (YYYY-MM-DD)"
                 variant="outlined"
                 color="secondary"
+                value={getCurrentDate()}
                 onChange={(event) => setRepoUntil(event.target.value)}
               />
             </div>
