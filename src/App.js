@@ -38,7 +38,7 @@ const App = () => {
           command: GIT_COMMAND,
           fileTree: response.data.file_tree,
           averageCommits: response.data.average_commits,
-          medianCommits: response.data.median_commits
+          medianCommits: response.data.median_commits,
         });
       }
 
@@ -171,6 +171,10 @@ const App = () => {
           </div>
         )}
 
+        <div>
+          https://codesandbox.io/s/github/anuraghazra/react-folder-tree?file=/src/utils.js
+        </div>
+
         {repoResult && (
           <div
             style={{
@@ -182,8 +186,13 @@ const App = () => {
             }}
           >
             <div>Repository: {repoResult.url}</div>
-            <div>Command: <i>{repoResult.command}</i></div>
-            <div><br /><b>Commit Stats:</b></div>
+            <div>
+              Command: <i>{repoResult.command}</i>
+            </div>
+            <div>
+              <br />
+              <b>Commit Stats:</b>
+            </div>
             <div>Total: {repoResult.totalCommits}</div>
             <div>Average: {repoResult.averageCommits}</div>
             <div>Median: {repoResult.medianCommits}</div>
