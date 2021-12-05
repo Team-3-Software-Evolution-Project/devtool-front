@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { get } from "axios";
 import "./App.css";
+import Tree from "./components/Tree/Tree";
 import { TextField } from "@mui/material";
 
 const App = () => {
@@ -78,6 +79,73 @@ const App = () => {
     });
 
     return filteredArray;
+  };
+
+  const generateFileTree = (fileTreeString, totalCommits) => {
+    let treeArray = fileTreeString.split("\n");
+
+    return (
+      <Tree
+        children={generateFolderContent(
+          treeArray[0],
+          treeArray,
+          0,
+          totalCommits
+        )}
+      ></Tree>
+    );
+  };
+
+  const generateFolderContent = (row, treeArray, indents, totalCommits) => {
+    console.log(`splice: ${treeArray.splice(0, 1)}`)
+    //console.log(`In TreeArray: ${treeArray}`)
+    let numberOfFiles = treeArray.findIndex((row) => row.includes("📂"));
+    //console.log(`filesInFolder=${numberOfFiles}`);
+    let newIndents = [...treeArray][numberOfFiles].split("📂")[0].length;
+    //console.log(`newIndents=${newIndents}`)
+
+    //console.log(`In TreeArray: ${[...treeArray].splice(0, numberOfFiles + 1)}`)
+    return (
+      <Tree.Folder
+        name={row}
+        children={[...treeArray].splice(0, numberOfFiles + 1).map((row, index) => {
+          //console.log(`Row=${row}`);
+          if (row.includes("📂") && newIndents > indents) {
+            console.log(`Creating new folder: ${row}`)
+            return (
+              <Tree.Folder
+                name={row}
+                key={row+index}
+                children={generateFolderContent(
+                  row,
+                  [...treeArray].splice(numberOfFiles),
+                  newIndents,
+                  totalCommits
+                )}
+              />
+            );
+          } else {
+            let commits = 0;
+            if (row.includes("[")) {
+              commits = row.split("[")[1].replace("]", "");
+            }
+
+            // Remove Scroll-emoji
+            row = row.trim().replace("📜", "");
+
+            // Currently 10% and 5% as limit for highlight
+            let commitColor = "black";
+            const commitRatio = commits / totalCommits;
+            if (commitRatio > 0.1) {
+              commitColor = "red";
+            } else if (commitRatio > 0.05) {
+              commitColor = "orange";
+            }
+            return <Tree.File name={row} color={commitColor} />;
+          }
+        })}
+      />
+    );
   };
 
   const Footer = () => (
@@ -172,7 +240,10 @@ const App = () => {
         )}
 
         <div>
-          https://codesandbox.io/s/github/anuraghazra/react-folder-tree?file=/src/utils.js
+          {generateFileTree(
+            "📂tiktok-dl/ [44]\n    📜package-lock.json [1]\n    📜.gitignore [7]\n    📜go.sum [1]\n    📜LICENSE [1]\n    📜README.md [15]\n    📜package.json [5]\n    📜go.mod [1]\n    📜main.go [10]\n    📜scraper.js [11]\n    📂models/ [20]\n        📜upload_test.go [6]\n        📜upload.go [7]\n        📂config/ [8]\n            📜config.go [8]\n    📂resources/ [5]\n        📜errorStrings.go [1]\n        📜flags.go [2]\n        📜messages.go [2]\n        📜scraper.go [2]\n    📂.sonar/ [1]\n        📜sonar-project.properties [1]\n    📂client/ [18]\n        📜getVideoDetails.go [4]\n        📜getMusicUploads.go [10]\n        📜getUserUploads.go [12]\n        📜executeClientAction.go [10]\n        📜getRedirectUrl.go [3]\n        📜getHashtagUploads.go [5]\n    📂workflows/ [18]\n        📜downloadVideo.go [9]\n        📜downloadMusic.go [12]\n        📜startWorkflowByParameter.go [7]\n        📜common.go [2]\n        📜downloadShareLink.go [4]\n        📜downloadBatchFile.go [6]\n        📜downloadScrapedData.go [1]\n        📜downloadUser.go [12]\n        📜downloadHashtag.go [8]\n    📂unitTestUtil/ [1]\n        📜assert.go [1]\n        📜unitTestUtil.go [1]\n    📂generator/ [2]\n        📜resources.go [2]\n        📜generator.go [1]\n    📂utils/ [12]\n        📜archive.go [4]\n        📜downloadFile.go [4]\n        📜getUsername.go [2]\n        📜readFileAsString.go [4]\n        📜getHashtag.go [3]\n        📜getScraper.go [1]\n        📜getUsername_test.go [2]\n        📂log/ [2]\n            📜log.go [2]\n        📂fileio/ [2]\n            📜fileio.go [2]\n        📂checkErr/ [1]\n            📜checkErr.go [1]",
+            "22"
+          )}
         </div>
 
         {repoResult && (
