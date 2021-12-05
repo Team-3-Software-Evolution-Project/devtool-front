@@ -68,6 +68,7 @@ const PlaceholderInput = ({
         onCancel && onCancel();
       }
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputRef]);
 
   return type === "file" ? (

@@ -12,7 +12,6 @@ import {
   ActionsWrapper,
   Collapse,
   StyledName,
-  VerticalLine,
 } from "../Tree.style";
 import { StyledFolder } from "./TreeFolder.style";
 
@@ -36,6 +35,7 @@ const Folder = ({ id, name, children, node, suffix = "", color = "black", setOpe
   useEffect(() => {
     setIsOpen(setOpen)
     setChilds([children]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [children]);
 
   const commitFolderCreation = (name) => {
@@ -62,6 +62,7 @@ const Folder = ({ id, name, children, node, suffix = "", color = "black", setOpe
       event.stopPropagation();
       onNodeClick({ node });
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [node]
   );
 

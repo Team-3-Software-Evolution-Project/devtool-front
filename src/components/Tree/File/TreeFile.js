@@ -30,6 +30,7 @@ const File = ({ name, id, node, suffix = "", color = "black" }) => {
       e.stopPropagation();
       onNodeClick({ node });
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [node]
   );
   const handleCancel = () => {
