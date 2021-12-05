@@ -53,9 +53,9 @@ export const StyledName = styled.div`
 
 export const Collapse = styled.div`
   height: max-content;
-  max-height: ${p => (p.isOpen ? "800px" : "0px")};
+  max-height: ${p => (p.isOpen ? "100%" : "0px")};
   overflow: hidden;
-  transition: 0.15s ease-in-out;
+  transition: 0.0s ease-in-out;
 `;
 
 export const VerticalLine = styled.section`

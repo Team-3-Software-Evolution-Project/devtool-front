@@ -27,13 +27,14 @@ const FolderName = ({ isOpen, name, handleClick, color="black" }) => (
   </StyledName>
 );
 
-const Folder = ({ id, name, children, node, suffix = "", color = "black" }) => {
+const Folder = ({ id, name, children, node, suffix = "", color = "black", setOpen=false }) => {
   const { dispatch, isImparative, onNodeClick } = useTreeContext();
   const [isEditing, setEditing] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [childs, setChilds] = useState([]);
 
   useEffect(() => {
+    setIsOpen(setOpen)
     setChilds([children]);
   }, [children]);
 

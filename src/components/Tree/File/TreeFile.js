@@ -15,7 +15,7 @@ const File = ({ name, id, node, suffix = "", color = "black" }) => {
   const ext = useRef("");
 
   let splitted = name?.split(".");
-  ext.current = splitted[splitted.length - 1];
+  ext.current = splitted[splitted.length - 1].split(" ")[0];
 
   const toggleEditing = () => setEditing(!isEditing);
   const commitEditing = (name) => {
