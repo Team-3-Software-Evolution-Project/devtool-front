@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { get } from "axios";
 import "./App.css";
+import Tree from "./components/Tree/Tree";
 import { TextField } from "@mui/material";
 
 const App = () => {
@@ -10,9 +11,9 @@ const App = () => {
   const [repoUntil, setRepoUntil] = useState("");
   const [repoResult, setRepoResult] = useState(undefined);
 
-  const API_URL = "https://devtool-api.herokuapp.com";
+  //const API_URL = "https://devtool-api.herokuapp.com";
   const GIT_COMMAND = "git log --oneline | wc -l";
-  //const API_URL = "http://127.0.0.1:8000";
+  const API_URL = "http://127.0.0.1:8000";
   //const GIT_COMMAND = "echo 33";
 
   const analyzeRepo = async () => {
@@ -38,7 +39,7 @@ const App = () => {
           command: GIT_COMMAND,
           fileTree: response.data.file_tree,
           averageCommits: response.data.average_commits,
-          medianCommits: response.data.median_commits
+          medianCommits: response.data.median_commits,
         });
       }
 
@@ -46,38 +47,54 @@ const App = () => {
     }
   };
 
-  const formatFileTree = (fileTreeString, totalCommits) => {
-    let treeArray = fileTreeString.split("\n");
-    var filteredArray = treeArray.map((row, index) => {
-      let commits = 0;
-      if (row.includes("📂")) {
-        return (
-          <span key={index}>
-            <b>{row}</b>
-            <br />
-          </span>
-        );
-      } else if (row.includes("[")) {
-        commits = row.split("[")[1].replace("]", "");
-      }
+  const buildFileTree = (fileTreeList, totalCommits, averageCommits) => {
+    let paths = fileTreeList;
 
-      // Currently 10% and 5% as limit for highlight
-      let commitColor = "black";
-      const commitRatio = commits / totalCommits;
-      if (commitRatio > 0.1) {
-        commitColor = "red";
-      } else if (commitRatio > 0.05) {
-        commitColor = "orange";
-      }
-      return (
-        <span key={index} style={{ color: commitColor }}>
-          {row}
-          <br />
-        </span>
-      );
+    let result = [];
+    let level = { result };
+
+    paths.forEach((path) => {
+      path.split("/").reduce((r, name, i, a) => {
+        if (i === 33) {
+          console.log(`r: ${r}`);
+          console.log(`name: ${name}`);
+          console.log(`i: ${i}`);
+          console.log(`a: ${a}`);
+        }
+
+        if (!r[name]) {
+          r[name] = { result: [] };
+          if (!name.includes(".") && !name.includes(" ")) {
+            r.result.push(
+              <Tree.Folder
+                name={name}
+                children={r[name].result}
+                setOpen={i === 0 ? true : false}
+              />
+            );
+          } else {
+            let commits = 0;
+            try {
+              commits = name?.split("[")[1].replace("]", "");
+            } catch (e) {
+              console.log(e);
+            }
+            let commitColor = "black";
+            if (commits > averageCommits * 2.5) {
+              commitColor = "red";
+            } else if (commits > averageCommits * 1.4) {
+              commitColor = "orange";
+            }
+            r.result.push(<Tree.File name={name} color={commitColor} />);
+          }
+        }
+
+        return r[name];
+      }, level);
     });
 
-    return filteredArray;
+    console.log(result);
+    return <Tree children={result} />;
   };
 
   const Footer = () => (
@@ -182,15 +199,24 @@ const App = () => {
             }}
           >
             <div>Repository: {repoResult.url}</div>
-            <div>Command: <i>{repoResult.command}</i></div>
-            <div><br /><b>Commit Stats:</b></div>
+            <div>
+              Command: <i>{repoResult.command}</i>
+            </div>
+            <div>
+              <br />
+              <b>Commit Stats:</b>
+            </div>
             <div>Total: {repoResult.totalCommits}</div>
             <div>Average: {repoResult.averageCommits}</div>
             <div>Median: {repoResult.medianCommits}</div>
-            <div style={{ whiteSpace: "pre-wrap" }}>
+            <div>
               <br />
               <b>Directory Tree:</b> <br />
-              {formatFileTree(repoResult.fileTree, repoResult.totalCommits)}
+              {buildFileTree(
+                repoResult.fileTree,
+                repoResult.totalCommits,
+                repoResult.averageCommits
+              )}
             </div>
           </div>
         )}
