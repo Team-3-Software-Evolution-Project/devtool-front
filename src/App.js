@@ -37,7 +37,8 @@ const App = () => {
           url: repoURL,
           command: GIT_COMMAND,
           fileTree: response.data.file_tree,
-          averageCommits: response.data.average_commits
+          averageCommits: response.data.average_commits,
+          medianCommits: response.data.median_commits
         });
       }
 
@@ -181,12 +182,14 @@ const App = () => {
             }}
           >
             <div>Repository: {repoResult.url}</div>
-            <div>Command: {repoResult.command}</div>
-            <div>Total commits: {repoResult.totalCommits}</div>
-            <div>Average commits: {repoResult.averageCommits}</div>
+            <div>Command: <i>{repoResult.command}</i></div>
+            <div><br /><b>Commit Stats:</b></div>
+            <div>Total: {repoResult.totalCommits}</div>
+            <div>Average: {repoResult.averageCommits}</div>
+            <div>Median: {repoResult.medianCommits}</div>
             <div style={{ whiteSpace: "pre-wrap" }}>
               <br />
-              Directory Tree: <br />
+              <b>Directory Tree:</b> <br />
               {formatFileTree(repoResult.fileTree, repoResult.totalCommits)}
             </div>
           </div>
