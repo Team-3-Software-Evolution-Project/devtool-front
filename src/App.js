@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { get } from "axios";
+import { v4 as uuidv4 } from 'uuid';
 import "./App.css";
 import Tree from "./components/Tree/Tree";
 import { TextField } from "@mui/material";
@@ -48,20 +49,11 @@ const App = () => {
   };
 
   const buildFileTree = (fileTreeList, totalCommits, averageCommits) => {
-    let paths = fileTreeList;
-
     let result = [];
     let level = { result };
 
-    paths.forEach((path) => {
+    fileTreeList.forEach((path) => {
       path.split("/").reduce((r, name, i, a) => {
-        if (i === 33) {
-          console.log(`r: ${r}`);
-          console.log(`name: ${name}`);
-          console.log(`i: ${i}`);
-          console.log(`a: ${a}`);
-        }
-
         if (!r[name]) {
           r[name] = { result: [] };
           if (!name.includes(".") && !name.includes(" ")) {
@@ -70,6 +62,7 @@ const App = () => {
                 name={name}
                 children={r[name].result}
                 setOpen={i === 0 ? true : false}
+                key={name+uuidv4()}
               />
             );
           } else {
@@ -77,7 +70,7 @@ const App = () => {
             try {
               commits = name?.split("[")[1].replace("]", "");
             } catch (e) {
-              console.log(e);
+              console.log(`${name}: ${e}`);
             }
             let commitColor = "black";
             if (commits > averageCommits * 2.5) {
@@ -85,7 +78,7 @@ const App = () => {
             } else if (commits > averageCommits * 1.4) {
               commitColor = "orange";
             }
-            r.result.push(<Tree.File name={name} color={commitColor} />);
+            r.result.push(<Tree.File name={name} color={commitColor} key={name+uuidv4()} />);
           }
         }
 
@@ -93,7 +86,6 @@ const App = () => {
       }, level);
     });
 
-    console.log(result);
     return <Tree children={result} />;
   };
 
