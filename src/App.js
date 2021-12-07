@@ -170,7 +170,7 @@ const App = () => {
                 label="Until (YYYY-MM-DD)"
                 variant="outlined"
                 color="secondary"
-                value={getCurrentDate()}
+                defaultValue={getCurrentDate()}
                 onChange={(event) => setRepoUntil(event.target.value)}
               />
             </div>
