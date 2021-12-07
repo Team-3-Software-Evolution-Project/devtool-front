@@ -162,7 +162,7 @@ const App = () => {
                 label="After (YYYY-MM-DD)"
                 variant="outlined"
                 color="secondary"
-                value="2000-01-01"
+                defaultValue="2000-01-01"
                 onChange={(event) => setRepoAfter(event.target.value)}
               />
               <TextField
